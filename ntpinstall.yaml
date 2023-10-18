@@ -1,0 +1,23 @@
+---
+- import_playbook: loop.yaml
+- hosts: localhost
+  vars:
+    packagename: chrony
+  tasks:
+    - name: Install {{packagename}} on AWS Linux Machine
+      yum: name="{{packagename}}" state=present
+      register: package_output
+    - name: Copy chrony.conf
+      copy: src=/home/ansible-user5/chrony.conf  dest=/etc/chrony.conf
+      notify:
+      - restart chrony
+      when: package_output.rc == 0
+    - name: Ignore if ntp is not there
+      package: name=ntp state=present
+      ignore_errors: yes
+    - name: To start {{packagename}} service
+      service: name=chronyd state=started enabled=yes
+
+  handlers:
+    - name: restart chrony
+      service: name=chronyd state=restarted
