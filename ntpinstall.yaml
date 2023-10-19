@@ -21,3 +21,5 @@
   handlers:
     - name: restart chrony
       service: name=chronyd state=restarted
+    - debug:
+        msg: Hi hello
