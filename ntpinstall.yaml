@@ -1,5 +1,4 @@
 ---
-- import_playbook: loop.yaml
 - hosts: localhost
   vars:
     packagename: chrony
